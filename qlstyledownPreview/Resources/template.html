@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+{{DEFAULT_CSS}}
+</style>
+
+<style>
+{{HIGHLIGHT_CSS}}
+</style>
+
+<style>
+{{USER_CSS}}
+</style>
+
+<script>
+{{MARKDOWN_IT_JS}}
+</script>
+
+<script>
+{{HIGHLIGHT_JS}}
+</script>
+
+</head>
+
+<body>
+<article id="content"></article>
+
+<script>
+(function() {
+  // Base64 디코딩 (UTF-8 안전)
+  var base64 = "{{MARKDOWN_BASE64}}";
+  var bytes = Uint8Array.from(atob(base64), function(c) { return c.charCodeAt(0); });
+  var raw = new TextDecoder("utf-8").decode(bytes);
+
+  var md = window.markdownit({
+    html: false,
+    linkify: true,
+    typographer: true,
+    highlight: function(str, lang) {
+      if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(str, { language: lang }).value;
+        } catch (_) {}
+      }
+      return '';
+    }
+  });
+
+  document.getElementById("content").innerHTML = md.render(raw);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+/*
+ * qlstyledown - minimal.css
+ * 사용자 CSS 작성을 위한 최소 템플릿
+ *
+ * 사용법:
+ *   1. 이 파일을 복사하여 원하는 위치에 저장
+ *   2. 글로벌 적용: ~/.qlstyledown/style.css 로 저장
+ *   3. 폴더별 적용: .md 파일과 같은 디렉토리에 style.css 로 저장
+ *   4. 파일별 적용: .md 파일 상단에 frontmatter 추가
+ *      ---
+ *      css: my-style.css
+ *      ---
+ *
+ * 이 템플릿을 기반으로 원하는 스타일을 추가/수정하세요.
+ */
+
+/* === 색상 변수 (라이트 모드) === */
+
+:root {
+  --fg: #333333;
+  --bg: #ffffff;
+  --link: #0066cc;
+  --border: #dddddd;
+  --code-bg: #f5f5f5;
+  --quote: #666666;
+}
+
+/* === 색상 변수 (다크 모드) === */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #dddddd;
+    --bg: #1a1a1a;
+    --link: #6db3f2;
+    --border: #444444;
+    --code-bg: #2d2d2d;
+    --quote: #aaaaaa;
+  }
+}
+
+/* === 기본 === */
+
+body {
+  margin: 0;
+  padding: 32px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+article {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* === 제목 === */
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+/* === 링크 === */
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+/* === 코드 === */
+
+code {
+  padding: 0.2em 0.4em;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 90%;
+  background: var(--code-bg);
+  border-radius: 4px;
+}
+
+pre {
+  padding: 16px;
+  overflow: auto;
+  background: var(--code-bg);
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  background: transparent;
+}
+
+/* === 인용 === */
+
+blockquote {
+  margin: 0 0 1em 0;
+  padding: 0 1em;
+  color: var(--quote);
+  border-left: 3px solid var(--border);
+}
+
+/* === 표 === */
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+th, td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+}
+
+/* === 구분선 === */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2em 0;
+}
+
+/* === 이미지 === */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
