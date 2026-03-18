@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct qlstyledownApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     init() {
         SetupManager.installDefaultThemes()
     }
@@ -16,6 +18,25 @@ struct qlstyledownApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+        }
+        .defaultSize(width: 480, height: 300)
+        .commands {
+            CommandGroup(replacing: .newItem) { }
+        }
+    }
+
+    class AppDelegate: NSObject, NSApplicationDelegate {
+        func applicationDidFinishLaunching(_ notification: Notification) {
+            // 창을 자동으로 띄우지 않음
+            NSApp.setActivationPolicy(.accessory)
+        }
+
+        func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+            if !flag {
+                NSApp.setActivationPolicy(.regular)
+                NSApp.activate(ignoringOtherApps: true)
+            }
+            return true
         }
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		40B8C1642F6AD3BB0086BA83 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40B8C1632F6AD3BB0086BA83 /* Quartz.framework */; };
 		40B8C1702F6AD3BB0086BA83 /* qlstyledownPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 40B8C1612F6AD3BB0086BA83 /* qlstyledownPreview.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AABB00102F6ADB370086BA83 /* qlstyledown-cli in Copy CLI */ = {isa = PBXBuildFile; fileRef = 40B8C2052F6ADB370086BA83 /* qlstyledown-cli */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -18,6 +19,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40B8C1602F6AD3BB0086BA83;
 			remoteInfo = qlstyledownPreview;
+		};
+		AABB00122F6ADB370086BA83 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 40747AA02F6AD24400FA40E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 40B8C2042F6ADB370086BA83;
+			remoteInfo = "qlstyledown-cli";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -41,6 +49,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		AABB00112F6ADB370086BA83 /* Copy CLI */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				AABB00102F6ADB370086BA83 /* qlstyledown-cli in Copy CLI */,
+			);
+			name = "Copy CLI";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -154,11 +173,13 @@
 				40747AA52F6AD24400FA40E2 /* Frameworks */,
 				40747AA62F6AD24400FA40E2 /* Resources */,
 				40B8C1712F6AD3BB0086BA83 /* Embed Foundation Extensions */,
+				AABB00112F6ADB370086BA83 /* Copy CLI */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				40B8C16F2F6AD3BB0086BA83 /* PBXTargetDependency */,
+				AABB00132F6ADB370086BA83 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				40747AAA2F6AD24400FA40E2 /* qlstyledown */,
@@ -306,6 +327,11 @@
 			target = 40B8C1602F6AD3BB0086BA83 /* qlstyledownPreview */;
 			targetProxy = 40B8C16E2F6AD3BB0086BA83 /* PBXContainerItemProxy */;
 		};
+		AABB00132F6ADB370086BA83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 40B8C2042F6ADB370086BA83 /* qlstyledown-cli */;
+			targetProxy = AABB00122F6ADB370086BA83 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -448,7 +474,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ohresearch.qlstyledown;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -480,7 +506,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ohresearch.qlstyledown;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -514,7 +540,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ohresearch.qlstyledown.qlstyledownPreview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -556,7 +582,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ohresearch.qlstyledown.qlstyledownPreview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

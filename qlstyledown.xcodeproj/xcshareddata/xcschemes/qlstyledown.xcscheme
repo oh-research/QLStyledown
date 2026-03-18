@@ -21,6 +21,20 @@
                ReferencedContainer = "container:qlstyledown.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "40B8C2042F6ADB370086BA83"
+               BuildableName = "qlstyledown-cli"
+               BlueprintName = "qlstyledown-cli"
+               ReferencedContainer = "container:qlstyledown.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
