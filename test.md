@@ -54,11 +54,50 @@ console.log(md.render("# Hello"));
 | Markdown 렌더링 | ✅ | markdown-it |
 | CSS 적용 | ✅ | GitHub 테마 |
 | 다크모드 | ✅ | 자동 전환 |
-| 코드 하이라이팅 | ⏳ | Phase 3 |
+| 코드 하이라이팅 | ✅ | highlight.js |
+| 수식 렌더링 | ✅ | KaTeX |
+| HTML 태그 | ✅ | DOMPurify |
+| 다이어그램 | ✅ | Mermaid |
 
 ## 수평선
 
 ---
+
+## 수식 (KaTeX)
+
+인라인 수식: 아인슈타인의 $E = mc^2$ 공식
+
+블록 수식:
+
+$$\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$$
+
+$$\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}$$
+
+## HTML 태그
+
+줄바꿈: 첫째 줄<br>둘째 줄
+
+<details>
+<summary>클릭하면 펼쳐집니다</summary>
+
+숨겨진 내용입니다.
+
+</details>
+
+<mark>하이라이트 텍스트</mark>
+
+<kbd>Ctrl</kbd> + <kbd>C</kbd>
+
+## Mermaid 다이어그램
+
+```mermaid
+graph TD
+    A[Markdown 파일] --> B[markdown-it 렌더링]
+    B --> C[DOMPurify sanitize]
+    C --> D[Quick Look 표시]
+    B --> E[KaTeX 수식]
+    B --> F[Mermaid 다이어그램]
+```
 
 ## 이미지 (상대경로 테스트)
 
@@ -75,4 +114,4 @@ console.log(md.render("# Hello"));
 ## 한국어 테스트
 
 가나다라마바사아자차카타파하
-ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ 
+ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ

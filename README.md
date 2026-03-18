@@ -7,9 +7,12 @@ macOS Finder에서 `.md` 파일을 선택하고 Space를 누르면, 사용자가
 ## 특징
 
 - **GitHub 스타일** 기본 테마 (다크모드 자동 전환)
+- **8개 기본 테마** + 커스텀 CSS 테마 지원
 - **코드 구문 하이라이팅** (highlight.js)
-- **커스텀 CSS 테마** 지원
-- **CLI로 테마 전환** - 앱 상주 불필요
+- **수식 렌더링** — `$E=mc^2$` 인라인, `$$...$$` 블록 (KaTeX)
+- **Mermaid 다이어그램** — ` ```mermaid ` 코드 블록
+- **HTML 태그 지원** — `<br>`, `<details>`, `<mark>` 등 (DOMPurify로 XSS 방지)
+- **CLI로 테마 전환** — 앱 상주 불필요
 - 외부 의존성 없음 (pandoc 불필요)
 - 네트워크 요청 없음 (모든 리소스 번들 내장)
 
@@ -147,10 +150,13 @@ rm -rf ~/.qlstyledown
 
 ## 기술 스택
 
-- **WKWebView** - 렌더링 엔진
-- **markdown-it** - Markdown → HTML 변환
-- **highlight.js** - 코드 구문 하이라이팅
-- **Swift / SwiftUI** - 앱 및 Extension
+- **WKWebView** — 렌더링 엔진
+- **markdown-it** — Markdown → HTML 변환 (`html: true`)
+- **highlight.js** — 코드 구문 하이라이팅
+- **KaTeX** + **markdown-it-texmath** — 수식 렌더링
+- **DOMPurify** — HTML sanitizer (XSS 방지)
+- **Mermaid** — 다이어그램 렌더링
+- **Swift / SwiftUI** — 앱 및 Extension
 
 ## 라이선스
 

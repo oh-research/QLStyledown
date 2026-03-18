@@ -72,6 +72,24 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
         let highlightCSSDark = (try? String(contentsOf: bundle.url(forResource: "highlight-github-dark", withExtension: "css")!, encoding: .utf8)) ?? ""
         let highlightCSS = highlightCSSLight + "\n@media (prefers-color-scheme: dark) {\n" + highlightCSSDark + "\n}\n"
 
+        // KaTeX (수식 렌더링 — optional)
+        let katexJS = bundle.url(forResource: "katex.min", withExtension: "js")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+        let katexCSS = bundle.url(forResource: "katex.min", withExtension: "css")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+
+        // markdown-it-texmath (KaTeX ↔ markdown-it 연결 — optional)
+        let texmathJS = bundle.url(forResource: "markdown-it-texmath.min", withExtension: "js")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+
+        // DOMPurify (HTML sanitizer — optional)
+        let dompurifyJS = bundle.url(forResource: "purify.min", withExtension: "js")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+
+        // Mermaid (다이어그램 — optional)
+        let mermaidJS = bundle.url(forResource: "mermaid.min", withExtension: "js")
+            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+
         // 5. 사용자 CSS 탐색 (우선순위: frontmatter → 로컬 → 글로벌)
         let mdParentDir = url.deletingLastPathComponent()
         let userCSS = loadUserCSS(frontmatter: frontmatter, mdDirectory: mdParentDir)
@@ -82,6 +100,11 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
         let safeUserCSS = userCSS.replacingOccurrences(of: "</style>", with: "<\\/style>")
         let safeJS = jsString.replacingOccurrences(of: "</script>", with: "<\\/script>")
         let safeHighlightJS = highlightJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
+        let safeKatexJS = katexJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
+        let safeKatexCSS = katexCSS.replacingOccurrences(of: "</style>", with: "<\\/style>")
+        let safeTexmathJS = texmathJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
+        let safeDompurifyJS = dompurifyJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
+        let safeMermaidJS = mermaidJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
 
         // 7. 템플릿 조립
         var html = templateString
@@ -90,6 +113,11 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
         html = html.replacingOccurrences(of: "{{USER_CSS}}", with: safeUserCSS)
         html = html.replacingOccurrences(of: "{{MARKDOWN_IT_JS}}", with: safeJS)
         html = html.replacingOccurrences(of: "{{HIGHLIGHT_JS}}", with: safeHighlightJS)
+        html = html.replacingOccurrences(of: "{{KATEX_JS}}", with: safeKatexJS)
+        html = html.replacingOccurrences(of: "{{KATEX_CSS}}", with: safeKatexCSS)
+        html = html.replacingOccurrences(of: "{{TEXMATH_JS}}", with: safeTexmathJS)
+        html = html.replacingOccurrences(of: "{{DOMPURIFY_JS}}", with: safeDompurifyJS)
+        html = html.replacingOccurrences(of: "{{MERMAID_JS}}", with: safeMermaidJS)
         html = html.replacingOccurrences(of: "{{MARKDOWN_BASE64}}", with: base64)
 
         // 8. temp 파일에 저장 + loadFileURL로 로드

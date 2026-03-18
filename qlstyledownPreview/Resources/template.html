@@ -13,6 +13,10 @@
 </style>
 
 <style>
+{{KATEX_CSS}}
+</style>
+
+<style>
 {{USER_CSS}}
 </style>
 
@@ -24,6 +28,22 @@
 {{HIGHLIGHT_JS}}
 </script>
 
+<script>
+{{KATEX_JS}}
+</script>
+
+<script>
+{{TEXMATH_JS}}
+</script>
+
+<script>
+{{DOMPURIFY_JS}}
+</script>
+
+<script>
+{{MERMAID_JS}}
+</script>
+
 </head>
 
 <body>
@@ -31,16 +51,21 @@
 
 <script>
 (function() {
-  // Base64 디코딩 (UTF-8 안전)
+  // 1. Base64 디코딩 (UTF-8 안전)
   var base64 = "{{MARKDOWN_BASE64}}";
   var bytes = Uint8Array.from(atob(base64), function(c) { return c.charCodeAt(0); });
   var raw = new TextDecoder("utf-8").decode(bytes);
 
+  // 2. markdown-it 설정 (html:true + DOMPurify로 보호)
   var md = window.markdownit({
-    html: false,
+    html: true,
     linkify: true,
     typographer: true,
     highlight: function(str, lang) {
+      // Mermaid: 렌더링하지 않고 특수 컨테이너로 출력
+      if (lang === 'mermaid') {
+        return '<pre class="mermaid-source">' + md.utils.escapeHtml(str) + '</pre>';
+      }
       if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
         try {
           return hljs.highlight(str, { language: lang }).value;
@@ -50,7 +75,71 @@
     }
   });
 
-  document.getElementById("content").innerHTML = md.render(raw);
+  // 3. KaTeX 수식 플러그인 등록
+  if (typeof texmath !== 'undefined' && typeof katex !== 'undefined') {
+    md.use(texmath, {
+      engine: katex,
+      delimiters: 'dollars',
+      katexOptions: { throwOnError: false }
+    });
+  }
+
+  // 4. Markdown 렌더링
+  var rendered = md.render(raw);
+
+  // 5. DOMPurify로 XSS 방지 (html:true 안전장치)
+  if (typeof DOMPurify !== 'undefined') {
+    rendered = DOMPurify.sanitize(rendered, {
+      USE_PROFILES: { html: true },
+      ADD_TAGS: ['math', 'mrow', 'mi', 'mo', 'mn', 'msup', 'msub',
+                 'mfrac', 'mover', 'munder', 'msqrt', 'mtable',
+                 'mtr', 'mtd', 'mtext', 'mspace', 'annotation',
+                 'semantics', 'munderover', 'mpadded', 'menclose',
+                 'span', 'div'],
+      ADD_ATTR: ['xmlns', 'mathvariant', 'displaystyle', 'scriptlevel',
+                 'display', 'class', 'style', 'aria-hidden', 'focusable',
+                 'role', 'viewBox', 'width', 'height'],
+      ALLOW_DATA_ATTR: false
+    });
+  }
+
+  // 6. DOM에 삽입
+  document.getElementById("content").innerHTML = rendered;
+
+  // 7. Mermaid 다이어그램 후처리
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: (window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+             ? 'dark' : 'default',
+      securityLevel: 'strict'
+    });
+
+    var blocks = document.querySelectorAll('pre.mermaid-source');
+    blocks.forEach(function(block, i) {
+      var code = block.textContent;
+      var container = document.createElement('div');
+      container.className = 'mermaid';
+      block.parentNode.replaceChild(container, block);
+      mermaid.render('mermaid-' + i, code).then(function(result) {
+        container.innerHTML = result.svg;
+      }).catch(function() {
+        container.innerHTML = '<pre><code>' + code + '</code></pre>';
+      });
+    });
+  }
+
+  // 앵커 링크 클릭 처리
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[href^="#"]');
+    if (link) {
+      e.preventDefault();
+      var id = link.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
 })();
 </script>
 
