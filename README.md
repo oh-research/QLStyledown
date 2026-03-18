@@ -103,6 +103,12 @@ rm -rf ~/.qlstyledown
 rm -f /usr/local/bin/qlstyledown
 ```
 
+> **참고**: 삭제 후에도 Quick Look에서 "확장 프로그램을 찾을 수 없습니다" 메시지가 나올 수 있습니다.
+> 시스템 캐시가 남아있기 때문이며, **로그아웃 후 다시 로그인**하면 해결됩니다.
+> ```bash
+> qlmanage -r  # Quick Look 캐시 초기화
+> ```
+
 ## 기술 스택
 
 - **WKWebView** - 렌더링 엔진
