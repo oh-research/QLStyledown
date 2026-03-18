@@ -66,7 +66,20 @@ cp my-theme.css ~/.qlstyledown/themes/
 qlstyledown use my-theme
 ```
 
-기본 제공 테마(`github.css`, `minimal.css`)를 참고하여 작성하세요.
+### 기본 제공 테마
+
+| 테마 | 특징 | 밝기 |
+|---|---|---|
+| `github` | GitHub 스타일 | 라이트/다크 자동 |
+| `lapis` | 블루톤 클린 | 라이트/다크 자동 |
+| `tailwind` | 모던 타이포그래피 | 라이트/다크 자동 |
+| `solarized-light` | 따뜻한 크림색, 세리프 서체 | 라이트 |
+| `nord` | 북극 블루 | 다크 |
+| `monokai` | 비비드 에디터 컬러 | 다크 |
+| `warp-gradient` | 틸 그라디언트 | 다크 |
+| `minimal` | 커스텀 CSS 작성용 템플릿 | 라이트/다크 자동 |
+
+커스텀 테마 작성 시 `minimal.css`를 참고하세요.
 
 ### CSS 우선순위
 
@@ -91,6 +104,30 @@ qlstyledown use my-theme
 brew uninstall --cask qlstyledown
 ```
 
+사용자 테마까지 완전히 제거하려면:
+
+```bash
+brew zap qlstyledown
+```
+
+### 완전 삭제 + 캐시 초기화 + 재설치
+
+```bash
+# 1. 완전 삭제
+brew uninstall --cask qlstyledown 2>/dev/null
+rm -rf ~/.qlstyledown
+
+# 2. 캐시 + tap 갱신
+brew cleanup --prune=all
+brew update
+
+# 3. 재설치
+brew install --cask qlstyledown
+
+# 4. 확인
+qlstyledown themes
+```
+
 ### 수동 삭제
 
 ```bash
@@ -100,7 +137,6 @@ pluginkit -e ignore -i com.ohresearch.qlstyledown.qlstyledownPreview
 # 파일 삭제
 rm -rf /Applications/qlstyledown.app
 rm -rf ~/.qlstyledown
-rm -f /usr/local/bin/qlstyledown
 ```
 
 > **참고**: 삭제 후에도 Quick Look에서 "확장 프로그램을 찾을 수 없습니다" 메시지가 나올 수 있습니다.
