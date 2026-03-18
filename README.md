@@ -94,6 +94,10 @@ brew uninstall --cask qlstyledown
 ### 수동 삭제
 
 ```bash
+# Extension 등록 해제
+pluginkit -e ignore -i com.ohresearch.qlstyledown.qlstyledownPreview
+
+# 파일 삭제
 rm -rf /Applications/qlstyledown.app
 rm -rf ~/.qlstyledown
 rm -f /usr/local/bin/qlstyledown
