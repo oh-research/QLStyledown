@@ -1,0 +1,183 @@
+/*
+ * qlstyledown - lapis.css
+ * Cool blue-toned theme
+ * Color palette inspired by Lapis (MIT License, YiNNx)
+ */
+
+/* === 라이트 모드 === */
+
+:root {
+  --primary: #4870ac;
+  --text: #40464f;
+  --bg: #ffffff;
+  --marker: #a2b6d4;
+  --block-bg: #f6f8fa;
+  --border: #e3e8f0;
+  --code-text: #4870ac;
+  --quote-border: #a2b6d4;
+  --heading: #2a4a7a;
+}
+
+/* === 다크 모드 === */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #8393ad;
+    --text: #e4e4e4;
+    --bg: #1e222a;
+    --marker: #7d8a9f;
+    --block-bg: #282d38;
+    --border: #2a2f3b;
+    --code-text: #abbad4;
+    --quote-border: #47556d;
+    --heading: #c8d4e8;
+  }
+}
+
+/* === 기본 === */
+
+body {
+  margin: 0;
+  padding: 32px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+}
+
+article {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* === 제목 === */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading);
+  font-weight: 700;
+  margin: 1.8em 0 0.6em;
+  line-height: 1.28;
+}
+
+h1 { font-size: 2.1rem; }
+
+h2 {
+  font-size: 1.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--border);
+}
+
+h3 { font-size: 1.32rem; }
+h4 { font-size: 1.1rem; }
+
+h5, h6 {
+  font-size: 0.92rem;
+  color: var(--marker);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === 텍스트 === */
+
+strong { color: var(--heading); }
+
+/* === 링크 === */
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+a:hover {
+  border-bottom-color: var(--primary);
+}
+
+/* === 코드 === */
+
+code {
+  color: var(--code-text);
+  background: var(--block-bg);
+  border-radius: 5px;
+  padding: 0.15rem 0.4rem;
+  font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  margin: 1.2rem 0;
+  padding: 1rem 1.2rem;
+  background: var(--block-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+pre code {
+  color: var(--text);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* === 인용 === */
+
+blockquote {
+  margin: 1rem 0;
+  padding: 0.6rem 1.1rem;
+  color: var(--text);
+  background: var(--block-bg);
+  border-left: 4px solid var(--quote-border);
+  border-radius: 0 8px 8px 0;
+}
+
+/* === 구분선 === */
+
+hr {
+  border: none;
+  height: 2px;
+  background: var(--border);
+  margin: 2rem 0;
+}
+
+/* === 표 === */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+thead th {
+  color: var(--heading);
+  background: var(--block-bg);
+  font-weight: 600;
+}
+
+th, td {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even) td {
+  background: var(--block-bg);
+}
+
+/* === 이미지 === */
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px var(--border);
+}
+
+/* === 리스트 === */
+
+ul, ol { padding-left: 1.5rem; }
+li::marker { color: var(--marker); }
+input[type="checkbox"] { accent-color: var(--primary); }

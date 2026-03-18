@@ -54,15 +54,24 @@ enum SetupManager {
         }
 
         // 번들에서 기본 테마 복사 (이미 있으면 덮어쓰지 않음)
+        // 키: 번들 리소스 이름, 값: 설치될 파일 이름
         let bundle = Bundle.main
-        let themeFiles = ["default", "minimal"]
+        let themeFiles: [(resource: String, dest: String)] = [
+            ("default", "github"),
+            ("minimal", "minimal"),
+            ("lapis", "lapis"),
+            ("tailwind", "tailwind"),
+            ("nord", "nord"),
+            ("monokai", "monokai"),
+            ("solarized-light", "solarized-light"),
+            ("warp-gradient", "warp-gradient"),
+        ]
 
         for theme in themeFiles {
-            let destName = theme == "default" ? "github" : theme
-            let destURL = themesDir.appendingPathComponent("\(destName).css")
+            let destURL = themesDir.appendingPathComponent("\(theme.dest).css")
 
             if !fm.fileExists(atPath: destURL.path) {
-                if let srcURL = bundle.url(forResource: theme, withExtension: "css") {
+                if let srcURL = bundle.url(forResource: theme.resource, withExtension: "css") {
                     try? fm.copyItem(at: srcURL, to: destURL)
                 }
             }

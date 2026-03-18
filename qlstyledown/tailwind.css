@@ -1,0 +1,193 @@
+/*
+ * qlstyledown - tailwind.css
+ * Clean, modern typography theme
+ * Color palette based on Tailwind CSS color system (MIT License)
+ */
+
+/* === 라이트 모드 === */
+
+:root {
+  --text: #1e293b;       /* slate-800 */
+  --text-soft: #475569;  /* slate-600 */
+  --bg: #ffffff;
+  --primary: #2563eb;    /* blue-600 */
+  --primary-light: #3b82f6; /* blue-500 */
+  --heading: #0f172a;    /* slate-900 */
+  --border: #e2e8f0;     /* slate-200 */
+  --block-bg: #f8fafc;   /* slate-50 */
+  --code-text: #be185d;  /* pink-700 */
+  --marker: #6366f1;     /* indigo-500 */
+}
+
+/* === 다크 모드 === */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e2e8f0;       /* slate-200 */
+    --text-soft: #94a3b8;  /* slate-400 */
+    --bg: #0f172a;         /* slate-900 */
+    --primary: #60a5fa;    /* blue-400 */
+    --primary-light: #93c5fd; /* blue-300 */
+    --heading: #f1f5f9;    /* slate-100 */
+    --border: #1e293b;     /* slate-800 */
+    --block-bg: #1e293b;   /* slate-800 */
+    --code-text: #f472b6;  /* pink-400 */
+    --marker: #818cf8;     /* indigo-400 */
+  }
+}
+
+/* === 기본 === */
+
+body {
+  margin: 0;
+  padding: 32px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+article {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* === 제목 === */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading);
+  font-weight: 800;
+  margin: 2em 0 0.6em;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+h1 { font-size: 2.25rem; }
+
+h2 {
+  font-size: 1.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 { font-size: 1.38rem; }
+h4 { font-size: 1.12rem; }
+
+h5, h6 {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+/* === 텍스트 === */
+
+p, li, figcaption { color: var(--text); }
+strong { color: var(--heading); }
+em { color: var(--text-soft); }
+
+/* === 링크 === */
+
+a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.3);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--primary-light);
+  text-decoration-color: var(--primary-light);
+}
+
+/* === 코드 === */
+
+code {
+  color: var(--code-text);
+  background: var(--block-bg);
+  border-radius: 6px;
+  padding: 0.2rem 0.4rem;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+pre {
+  margin: 1.5rem 0;
+  padding: 1.1rem 1.3rem;
+  background: var(--block-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+pre code {
+  color: var(--text);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-weight: 400;
+}
+
+/* === 인용 === */
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.2rem;
+  color: var(--text-soft);
+  border-left: 3px solid var(--marker);
+  background: transparent;
+}
+
+/* === 구분선 === */
+
+hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 2.5rem 0;
+}
+
+/* === 표 === */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+thead th {
+  color: var(--heading);
+  background: var(--block-bg);
+  font-weight: 700;
+  text-align: left;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* === 이미지 === */
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* === 리스트 === */
+
+ul, ol { padding-left: 1.5rem; }
+li::marker { color: var(--marker); }
+input[type="checkbox"] { accent-color: var(--primary); }

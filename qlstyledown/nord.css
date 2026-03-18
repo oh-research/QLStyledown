@@ -1,0 +1,168 @@
+/*
+ * qlstyledown - nord.css
+ * Arctic, north-bluish color palette (nordtheme.com)
+ */
+
+html {
+  background-color: #2e3440;
+}
+
+body {
+  margin: 0;
+  padding: 32px;
+  background: #2e3440;
+  color: #d8dee9;
+  font-family: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+article {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* === 제목 === */
+
+h1, h2, h3, h4, h5, h6 {
+  color: #eceff4;
+  font-weight: 700;
+  margin: 1.8em 0 0.6em;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.2rem; }
+
+h2 {
+  font-size: 1.7rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #3b4252;
+}
+
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.12rem; }
+
+h5, h6 {
+  font-size: 0.95rem;
+  color: #81a1c1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* === 텍스트 === */
+
+p, li, figcaption {
+  color: #d8dee9;
+}
+
+strong { color: #eceff4; }
+em { color: #e5e9f0; }
+
+/* === 링크 === */
+
+a {
+  color: #88c0d0;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(136, 192, 208, 0.3);
+}
+
+a:hover {
+  color: #8fbcbb;
+  border-bottom-color: rgba(143, 188, 187, 0.5);
+}
+
+/* === 코드 === */
+
+code {
+  color: #a3be8c;
+  background: #3b4252;
+  border-radius: 5px;
+  padding: 0.15rem 0.4rem;
+  font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  margin: 1.2rem 0;
+  padding: 1.1rem 1.2rem;
+  background: #3b4252;
+  border: 1px solid #434c5e;
+  border-radius: 14px;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+pre code {
+  color: #d8dee9;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* === 인용 === */
+
+blockquote {
+  margin: 1rem 0;
+  padding: 0.8rem 1.2rem;
+  color: #e5e9f0;
+  background: rgba(59, 66, 82, 0.5);
+  border-left: 4px solid #5e81ac;
+  border-radius: 0 10px 10px 0;
+}
+
+/* === 구분선 === */
+
+hr {
+  border: none;
+  height: 1px;
+  background: #434c5e;
+  margin: 2rem 0;
+}
+
+/* === 표 === */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;
+  background: #3b4252;
+  border: 1px solid #434c5e;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead th {
+  color: #eceff4;
+  background: #434c5e;
+  font-weight: 600;
+}
+
+th, td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #434c5e;
+}
+
+tbody tr:nth-child(even) td {
+  background: rgba(67, 76, 94, 0.3);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* === 이미지 === */
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* === 리스트 === */
+
+ul, ol { padding-left: 1.5rem; }
+li::marker { color: #81a1c1; }
+input[type="checkbox"] { accent-color: #88c0d0; }

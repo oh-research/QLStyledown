@@ -1,0 +1,158 @@
+/*
+ * qlstyledown - solarized-light.css
+ * Ethan Schoonover의 Solarized Light 팔레트 기반
+ */
+
+html {
+  background-color: #fdf6e3;
+}
+
+body {
+  margin: 0;
+  padding: 32px;
+  background: #fdf6e3;
+  color: #657b83;
+  font-family: "Charter", "Georgia", "Iowan Old Style", serif;
+  font-size: 16px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+}
+
+article {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+/* === 제목 === */
+
+h1, h2, h3, h4, h5, h6 {
+  color: #073642;
+  font-weight: 700;
+  margin: 1.8em 0 0.6em;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.2rem; }
+
+h2 {
+  font-size: 1.7rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid #eee8d5;
+}
+
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.12rem; }
+
+h5, h6 {
+  font-size: 0.95rem;
+  color: #93a1a1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* === 텍스트 === */
+
+p, li, figcaption {
+  color: #657b83;
+}
+
+strong { color: #073642; }
+em { color: #586e75; }
+
+/* === 링크 === */
+
+a {
+  color: #268bd2;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(38, 139, 210, 0.3);
+}
+
+a:hover {
+  color: #2aa198;
+  border-bottom-color: rgba(42, 161, 152, 0.5);
+}
+
+/* === 코드 === */
+
+code {
+  color: #d33682;
+  background: #eee8d5;
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+  font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  margin: 1.2rem 0;
+  padding: 1.1rem 1.2rem;
+  background: #eee8d5;
+  border-radius: 12px;
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+pre code {
+  color: #657b83;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* === 인용 === */
+
+blockquote {
+  margin: 1rem 0;
+  padding: 0.8rem 1.2rem;
+  color: #93a1a1;
+  background: rgba(238, 232, 213, 0.5);
+  border-left: 4px solid #2aa198;
+  border-radius: 0 10px 10px 0;
+}
+
+/* === 구분선 === */
+
+hr {
+  border: none;
+  height: 1px;
+  background: #eee8d5;
+  margin: 2rem 0;
+}
+
+/* === 표 === */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+thead th {
+  color: #073642;
+  background: #eee8d5;
+  font-weight: 600;
+}
+
+th, td {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #eee8d5;
+}
+
+tbody tr:nth-child(even) td {
+  background: rgba(238, 232, 213, 0.3);
+}
+
+/* === 이미지 === */
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* === 리스트 === */
+
+ul, ol { padding-left: 1.5rem; }
+li::marker { color: #2aa198; }
+input[type="checkbox"] { accent-color: #2aa198; }

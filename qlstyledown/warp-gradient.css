@@ -1,0 +1,238 @@
+/*
+ * qlstyledown - warp.css
+ * Teal gradient theme inspired by Warp terminal
+ */
+
+/* === 색상 변수 === */
+
+:root {
+  --bg-color: #0f4448;
+  --text-color: #e6f7f4;
+  --muted-color: #abd0cb;
+  --soft-text-color: #c8e8e4;
+  --heading-color: #f6fffd;
+  --accent-color: #7de1d5;
+  --accent-strong: #b8fff7;
+  --line-color: rgba(222, 246, 242, 0.12);
+  --code-bg: rgba(163, 243, 233, 0.12);
+  --inline-code-text: #d9fffb;
+  --fence-bg: rgba(3, 26, 30, 0.8);
+  --fence-text: #dffbf7;
+  --shadow-soft: 0 18px 54px rgba(0, 0, 0, 0.16);
+  --shadow-panel: 0 28px 80px rgba(1, 18, 22, 0.2);
+  --monospace: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", "Roboto Mono", ui-monospace, monospace;
+}
+
+/* === 기본 === */
+
+html {
+  font-size: 16px;
+  background-color: #165a5d;
+  background-image:
+    linear-gradient(180deg, #1e7b7f 0%, #145f63 18%, #0d4c50 42%, #0a3c40 68%, #062a2d 100%);
+  background-attachment: fixed;
+  color: var(--text-color);
+}
+
+body {
+  margin: 0;
+  padding: 32px;
+  background: transparent;
+  color: var(--text-color);
+  font-family: "Avenir Next", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;
+  line-height: 1.74;
+  -webkit-font-smoothing: antialiased;
+}
+
+article {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0.4rem 0;
+  color: var(--text-color);
+}
+
+/* === 텍스트 === */
+
+p, li, blockquote, table, figcaption {
+  color: var(--soft-text-color);
+  font-size: 1rem;
+}
+
+p, ul, ol, blockquote, table, pre {
+  margin: 1rem 0;
+}
+
+strong {
+  color: #ffffff;
+}
+
+em {
+  color: #d0ede8;
+}
+
+/* === 제목 === */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 1.9em 0 0.7em;
+}
+
+h1 {
+  font-size: 2.4rem;
+}
+
+h2 {
+  font-size: 1.78rem;
+  padding-bottom: 0.42rem;
+  border-bottom: 1px solid rgba(221, 247, 243, 0.12);
+}
+
+h3 {
+  font-size: 1.42rem;
+}
+
+h4 {
+  font-size: 1.16rem;
+}
+
+h5, h6 {
+  font-size: 0.98rem;
+  color: #abf6ee;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+/* === 링크 === */
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(125, 225, 213, 0.3);
+}
+
+a:hover {
+  color: var(--accent-strong);
+  border-bottom-color: rgba(184, 255, 247, 0.46);
+}
+
+/* === 인라인 코드 === */
+
+code {
+  color: var(--inline-code-text);
+  background: var(--code-bg);
+  border: 1px solid rgba(163, 243, 233, 0.12);
+  border-radius: 0.6rem;
+  padding: 0.18rem 0.48rem;
+  font-family: var(--monospace);
+  font-size: 0.92em;
+}
+
+/* === 코드 블록 === */
+
+pre {
+  position: relative;
+  margin: 1.4rem 0;
+  padding: 1.15rem 1.25rem;
+  color: var(--fence-text);
+  background-image:
+    radial-gradient(circle at top right, rgba(70, 190, 182, 0.16), transparent 18rem),
+    linear-gradient(180deg, rgba(5, 36, 40, 0.94), rgba(2, 22, 25, 0.98));
+  background-color: var(--fence-bg);
+  border: 1px solid rgba(122, 223, 214, 0.16);
+  border-radius: 18px;
+  box-shadow: var(--shadow-panel);
+  font-size: 0.93rem;
+  line-height: 1.65;
+  overflow: auto;
+}
+
+pre code {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--fence-text);
+  font-size: inherit;
+}
+
+/* === 인용 === */
+
+blockquote {
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  color: #d1ece8;
+  background: rgba(7, 41, 45, 0.42);
+  border-left: 4px solid rgba(131, 231, 220, 0.5);
+  border-radius: 0 14px 14px 0;
+  box-shadow: var(--shadow-soft);
+}
+
+/* === 구분선 === */
+
+hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(160, 246, 237, 0.38), transparent);
+  margin: 2.1rem 0;
+}
+
+/* === 표 === */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background: rgba(5, 34, 38, 0.52);
+  border: 1px solid rgba(228, 250, 247, 0.1);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+thead th {
+  color: #f1fffd;
+  background: rgba(121, 222, 214, 0.12);
+  font-weight: 650;
+}
+
+th, td {
+  padding: 0.8rem 0.95rem;
+  border-bottom: 1px solid rgba(228, 250, 247, 0.08);
+}
+
+tbody tr:nth-child(even) td {
+  background: rgba(138, 226, 216, 0.04);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* === 이미지 === */
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* === 리스트 === */
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+li::marker {
+  color: var(--accent-color);
+}
+
+/* === 체크박스 === */
+
+input[type="checkbox"] {
+  accent-color: var(--accent-color);
+}
