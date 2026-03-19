@@ -98,7 +98,7 @@
                  'span', 'div'],
       ADD_ATTR: ['xmlns', 'mathvariant', 'displaystyle', 'scriptlevel',
                  'display', 'class', 'style', 'aria-hidden', 'focusable',
-                 'role', 'viewBox', 'width', 'height'],
+                 'role', 'viewBox', 'width', 'height', 'src', 'alt', 'align'],
       ALLOW_DATA_ATTR: false
     });
   }
@@ -106,7 +106,20 @@
   // 6. DOM에 삽입
   document.getElementById("content").innerHTML = rendered;
 
-  // 7. Mermaid 다이어그램 후처리
+  // 7. 이미지를 placeholder로 교체 (sandbox 제약으로 로컬 이미지 로드 불가)
+  document.querySelectorAll('img').forEach(function(img) {
+    var src = img.getAttribute('src') || '';
+    if (src.startsWith('data:')) return; // data URI는 유지
+    var filename = src.split('/').pop() || src;
+    var alt = img.getAttribute('alt') || '';
+    var label = alt ? alt + ' (' + filename + ')' : filename;
+    var placeholder = document.createElement('span');
+    placeholder.className = 'ql-image-placeholder';
+    placeholder.textContent = label;
+    img.parentNode.replaceChild(placeholder, img);
+  });
+
+  // 8. Mermaid 다이어그램 후처리
   if (typeof mermaid !== 'undefined') {
     mermaid.initialize({
       startOnLoad: false,

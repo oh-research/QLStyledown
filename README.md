@@ -101,7 +101,7 @@ qlstyledown use my-theme
 
 ## 요구 사항
 
-- macOS 13.0 (Ventura) 이상
+- macOS 26.0 (Tahoe) 이상
 
 ## 삭제
 
@@ -164,4 +164,4 @@ rm -rf ~/.qlstyledown
 
 ## 라이선스
 
-MIT License
+MIT License  

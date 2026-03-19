@@ -19,7 +19,9 @@ struct qlstyledownApp: App {
         WindowGroup {
             ContentView()
         }
-        .defaultSize(width: 480, height: 300)
+        .defaultSize(width: 380, height: 400)
+        .defaultPosition(.center)
+        .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) { }
         }
@@ -27,15 +29,19 @@ struct qlstyledownApp: App {
 
     class AppDelegate: NSObject, NSApplicationDelegate {
         func applicationDidFinishLaunching(_ notification: Notification) {
-            // 창을 자동으로 띄우지 않음
-            NSApp.setActivationPolicy(.accessory)
+            NSApp.setActivationPolicy(.regular)
+            NSApp.activate(ignoringOtherApps: true)
+
+            // 창을 화면 중앙에 배치 + 포커스 해제
+            DispatchQueue.main.async {
+                if let window = NSApp.windows.first(where: { $0.isVisible }) {
+                    window.center()
+                    window.makeFirstResponder(nil)
+                }
+            }
         }
 
-        func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-            if !flag {
-                NSApp.setActivationPolicy(.regular)
-                NSApp.activate(ignoringOtherApps: true)
-            }
+        func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
             return true
         }
     }
@@ -57,7 +63,8 @@ enum SetupManager {
         // 키: 번들 리소스 이름, 값: 설치될 파일 이름
         let bundle = Bundle.main
         let themeFiles: [(resource: String, dest: String)] = [
-            ("default", "github"),
+            ("default", "default"),
+            ("github", "github"),
             ("minimal", "minimal"),
             ("lapis", "lapis"),
             ("tailwind", "tailwind"),
@@ -85,10 +92,10 @@ enum SetupManager {
 
             if let containerCSS = AppGroupConstants.containerCSSURL,
                !fm.fileExists(atPath: containerCSS.path) {
-                // github.css를 기본으로 복사
-                let githubCSS = themesDir.appendingPathComponent("github.css")
-                if fm.fileExists(atPath: githubCSS.path) {
-                    try? fm.copyItem(at: githubCSS, to: containerCSS)
+                // default.css를 기본으로 복사
+                let defaultCSS = themesDir.appendingPathComponent("default.css")
+                if fm.fileExists(atPath: defaultCSS.path) {
+                    try? fm.copyItem(at: defaultCSS, to: containerCSS)
                 }
             }
         }

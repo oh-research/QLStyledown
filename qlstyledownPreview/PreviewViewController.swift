@@ -33,109 +33,98 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
         view.addSubview(webView)
     }
 
-    func preparePreviewOfFile(at url: URL) async throws {
-        // 1. .md 파일 읽기
-        let rawMarkdown = try readMarkdownFile(at: url)
+    // MARK: - Preview
 
-        // 2. frontmatter 파싱
+    func preparePreviewOfFile(at url: URL) async throws {
+        let rawMarkdown = try readMarkdownFile(at: url)
         let (frontmatter, markdown) = parseFrontmatter(rawMarkdown)
 
-        // 3. Base64 인코딩
         guard let data = markdown.data(using: .utf8) else {
             throw PreviewError.encodingFailed
         }
-        let base64 = data.base64EncodedString()
 
-        // 4. 번들 리소스 읽기
         let bundle = Bundle(for: type(of: self))
+        let mdParentDir = url.deletingLastPathComponent()
 
-        guard let templateURL = bundle.url(forResource: "template", withExtension: "html"),
-              let templateString = try? String(contentsOf: templateURL, encoding: .utf8) else {
+        let html = try assembleHTML(
+            bundle: bundle,
+            base64: data.base64EncodedString(),
+            userCSS: loadUserCSS(frontmatter: frontmatter, mdDirectory: mdParentDir)
+        )
+
+        let tempHTML = FileManager.default.temporaryDirectory
+            .appendingPathComponent(".qlstyledown-preview.html")
+        try html.write(to: tempHTML, atomically: true, encoding: .utf8)
+        webView.loadFileURL(tempHTML, allowingReadAccessTo: FileManager.default.temporaryDirectory)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            try? FileManager.default.removeItem(at: tempHTML)
+        }
+    }
+
+    // MARK: - HTML 조립
+
+    private func assembleHTML(bundle: Bundle, base64: String, userCSS: String) throws -> String {
+        guard let template = loadResource(bundle: bundle, name: "template", ext: "html") else {
             throw PreviewError.templateNotFound
         }
-
-        guard let cssURL = bundle.url(forResource: "default", withExtension: "css"),
-              let cssString = try? String(contentsOf: cssURL, encoding: .utf8) else {
+        guard let defaultCSS = loadResource(bundle: bundle, name: "default", ext: "css") else {
             throw PreviewError.cssNotFound
         }
-
-        guard let jsURL = bundle.url(forResource: "markdown-it.min", withExtension: "js"),
-              let jsString = try? String(contentsOf: jsURL, encoding: .utf8) else {
+        guard let markdownItJS = loadResource(bundle: bundle, name: "markdown-it.min", ext: "js") else {
             throw PreviewError.jsNotFound
         }
 
-        // highlight.js (optional — 없어도 동작)
-        let highlightJS = (try? String(contentsOf: bundle.url(forResource: "highlight.min", withExtension: "js")!, encoding: .utf8)) ?? ""
+        let highlightCSS = buildHighlightCSS(bundle: bundle)
 
-        // highlight.js CSS (light + dark 합쳐서 삽입)
-        let highlightCSSLight = (try? String(contentsOf: bundle.url(forResource: "highlight-github", withExtension: "css")!, encoding: .utf8)) ?? ""
-        let highlightCSSDark = (try? String(contentsOf: bundle.url(forResource: "highlight-github-dark", withExtension: "css")!, encoding: .utf8)) ?? ""
-        let highlightCSS = highlightCSSLight + "\n@media (prefers-color-scheme: dark) {\n" + highlightCSSDark + "\n}\n"
+        let substitutions: [(String, String, EscapeType)] = [
+            ("{{DEFAULT_CSS}}", defaultCSS, .style),
+            ("{{HIGHLIGHT_CSS}}", highlightCSS, .style),
+            ("{{USER_CSS}}", userCSS, .style),
+            ("{{KATEX_CSS}}", loadResource(bundle: bundle, name: "katex.min", ext: "css") ?? "", .style),
+            ("{{MARKDOWN_IT_JS}}", markdownItJS, .script),
+            ("{{HIGHLIGHT_JS}}", loadResource(bundle: bundle, name: "highlight.min", ext: "js") ?? "", .script),
+            ("{{KATEX_JS}}", loadResource(bundle: bundle, name: "katex.min", ext: "js") ?? "", .script),
+            ("{{TEXMATH_JS}}", loadResource(bundle: bundle, name: "markdown-it-texmath.min", ext: "js") ?? "", .script),
+            ("{{DOMPURIFY_JS}}", loadResource(bundle: bundle, name: "purify.min", ext: "js") ?? "", .script),
+            ("{{MERMAID_JS}}", loadResource(bundle: bundle, name: "mermaid.min", ext: "js") ?? "", .script),
+            ("{{MARKDOWN_BASE64}}", base64, .none),
+        ]
 
-        // KaTeX (수식 렌더링 — optional)
-        let katexJS = bundle.url(forResource: "katex.min", withExtension: "js")
-            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
-        let katexCSS = bundle.url(forResource: "katex.min", withExtension: "css")
-            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+        var html = template
+        for (placeholder, content, escape) in substitutions {
+            html = html.replacingOccurrences(of: placeholder, with: escaped(content, type: escape))
+        }
+        return html
+    }
 
-        // markdown-it-texmath (KaTeX ↔ markdown-it 연결 — optional)
-        let texmathJS = bundle.url(forResource: "markdown-it-texmath.min", withExtension: "js")
-            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+    // MARK: - 번들 리소스
 
-        // DOMPurify (HTML sanitizer — optional)
-        let dompurifyJS = bundle.url(forResource: "purify.min", withExtension: "js")
-            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+    private func loadResource(bundle: Bundle, name: String, ext: String) -> String? {
+        guard let url = bundle.url(forResource: name, withExtension: ext) else { return nil }
+        return try? String(contentsOf: url, encoding: .utf8)
+    }
 
-        // Mermaid (다이어그램 — optional)
-        let mermaidJS = bundle.url(forResource: "mermaid.min", withExtension: "js")
-            .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
+    private func buildHighlightCSS(bundle: Bundle) -> String {
+        let light = loadResource(bundle: bundle, name: "highlight-github", ext: "css") ?? ""
+        let dark = loadResource(bundle: bundle, name: "highlight-github-dark", ext: "css") ?? ""
+        return light + "\n@media (prefers-color-scheme: dark) {\n" + dark + "\n}\n"
+    }
 
-        // 5. 사용자 CSS 탐색 (우선순위: frontmatter → 로컬 → 글로벌)
-        let mdParentDir = url.deletingLastPathComponent()
-        let userCSS = loadUserCSS(frontmatter: frontmatter, mdDirectory: mdParentDir)
+    // MARK: - 인젝션 방지
 
-        // 6. 치환 (인젝션 방지)
-        let safeDefaultCSS = cssString.replacingOccurrences(of: "</style>", with: "<\\/style>")
-        let safeHighlightCSS = highlightCSS.replacingOccurrences(of: "</style>", with: "<\\/style>")
-        let safeUserCSS = userCSS.replacingOccurrences(of: "</style>", with: "<\\/style>")
-        let safeJS = jsString.replacingOccurrences(of: "</script>", with: "<\\/script>")
-        let safeHighlightJS = highlightJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
-        let safeKatexJS = katexJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
-        let safeKatexCSS = katexCSS.replacingOccurrences(of: "</style>", with: "<\\/style>")
-        let safeTexmathJS = texmathJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
-        let safeDompurifyJS = dompurifyJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
-        let safeMermaidJS = mermaidJS.replacingOccurrences(of: "</script>", with: "<\\/script>")
+    private enum EscapeType { case style, script, none }
 
-        // 7. 템플릿 조립
-        var html = templateString
-        html = html.replacingOccurrences(of: "{{DEFAULT_CSS}}", with: safeDefaultCSS)
-        html = html.replacingOccurrences(of: "{{HIGHLIGHT_CSS}}", with: safeHighlightCSS)
-        html = html.replacingOccurrences(of: "{{USER_CSS}}", with: safeUserCSS)
-        html = html.replacingOccurrences(of: "{{MARKDOWN_IT_JS}}", with: safeJS)
-        html = html.replacingOccurrences(of: "{{HIGHLIGHT_JS}}", with: safeHighlightJS)
-        html = html.replacingOccurrences(of: "{{KATEX_JS}}", with: safeKatexJS)
-        html = html.replacingOccurrences(of: "{{KATEX_CSS}}", with: safeKatexCSS)
-        html = html.replacingOccurrences(of: "{{TEXMATH_JS}}", with: safeTexmathJS)
-        html = html.replacingOccurrences(of: "{{DOMPURIFY_JS}}", with: safeDompurifyJS)
-        html = html.replacingOccurrences(of: "{{MERMAID_JS}}", with: safeMermaidJS)
-        html = html.replacingOccurrences(of: "{{MARKDOWN_BASE64}}", with: base64)
-
-        // 8. temp 파일에 저장 + loadFileURL로 로드
-        // temp 파일과 .md 부모 디렉토리 모두 접근 가능하도록
-        // temp 디렉토리에 저장하고, allowingReadAccessTo에 두 경로의 공통 상위를 사용
-        let tempDir = FileManager.default.temporaryDirectory
-        let tempHTML = tempDir.appendingPathComponent("qlstyledown-preview.html")
-        try html.write(to: tempHTML, atomically: true, encoding: .utf8)
-
-        // 9. loadFileURL로 로드
-        // temp 파일 읽기를 위해 allowingReadAccessTo를 "/" 로 설정
-        // (sandbox extension이 이미 .md 부모 디렉토리와 temp에 접근 허용)
-        webView.loadFileURL(tempHTML, allowingReadAccessTo: URL(fileURLWithPath: "/"))
+    private func escaped(_ content: String, type: EscapeType) -> String {
+        switch type {
+        case .style:  return content.replacingOccurrences(of: "</style>", with: "<\\/style>")
+        case .script: return content.replacingOccurrences(of: "</script>", with: "<\\/script>")
+        case .none:   return content
+        }
     }
 
     // MARK: - Frontmatter 파싱
 
-    /// 제한된 frontmatter parser: 첫 줄이 "---"인 경우에만 파싱, css: 키만 추출
     private func parseFrontmatter(_ text: String) -> (css: String?, body: String) {
         let lines = text.components(separatedBy: .newlines)
 
@@ -155,51 +144,34 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
             return (nil, text)
         }
 
-        // frontmatter 블록에서 css: 키 추출
         var cssValue: String?
         for i in 1..<end {
             let line = lines[i].trimmingCharacters(in: .whitespaces)
             if line.lowercased().hasPrefix("css:") {
                 let value = line.dropFirst(4).trimmingCharacters(in: .whitespaces)
-                if !value.isEmpty {
-                    cssValue = value
-                }
+                if !value.isEmpty { cssValue = value }
                 break
             }
         }
 
-        // frontmatter 제거한 본문
-        let bodyLines = Array(lines[(end + 1)...])
-        let body = bodyLines.joined(separator: "\n")
-
+        let body = lines[(end + 1)...].joined(separator: "\n")
         return (cssValue, body)
     }
 
     // MARK: - CSS 우선순위 탐색
 
-    /// 우선순위: frontmatter CSS → 로컬 style.css → 글로벌 CSS (App Group Container)
     private func loadUserCSS(frontmatter: String?, mdDirectory: URL) -> String {
-        // 1. frontmatter 지정 CSS
         if let cssFilename = frontmatter {
             let cssURL = mdDirectory.appendingPathComponent(cssFilename)
-            if let css = try? String(contentsOf: cssURL, encoding: .utf8) {
-                return css
-            }
+            if let css = try? String(contentsOf: cssURL, encoding: .utf8) { return css }
         }
 
-        // 2. 로컬 style.css
         let localCSS = mdDirectory.appendingPathComponent("style.css")
-        if let css = try? String(contentsOf: localCSS, encoding: .utf8) {
-            return css
-        }
+        if let css = try? String(contentsOf: localCSS, encoding: .utf8) { return css }
 
-        // 3. 글로벌 CSS (App Group Container)
         if let containerCSS = AppGroupConstants.containerCSSURL,
-           let css = try? String(contentsOf: containerCSS, encoding: .utf8) {
-            return css
-        }
+           let css = try? String(contentsOf: containerCSS, encoding: .utf8) { return css }
 
-        // 사용자 CSS 없음 → 빈 문자열 (default.css만 적용)
         return ""
     }
 
@@ -209,37 +181,20 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
         let rawData = try Data(contentsOf: url)
 
         // BOM 감지
-        if rawData.starts(with: [0xEF, 0xBB, 0xBF]) {
-            let textData = rawData.dropFirst(3)
-            if let text = String(data: Data(textData), encoding: .utf8) {
-                return text
-            }
-        }
+        if rawData.starts(with: [0xEF, 0xBB, 0xBF]),
+           let text = String(data: Data(rawData.dropFirst(3)), encoding: .utf8) { return text }
+        if rawData.starts(with: [0xFF, 0xFE]),
+           let text = String(data: rawData, encoding: .utf16LittleEndian) { return text }
+        if rawData.starts(with: [0xFE, 0xFF]),
+           let text = String(data: rawData, encoding: .utf16BigEndian) { return text }
 
-        if rawData.starts(with: [0xFF, 0xFE]) {
-            if let text = String(data: rawData, encoding: .utf16LittleEndian) {
-                return text
-            }
-        }
-
-        if rawData.starts(with: [0xFE, 0xFF]) {
-            if let text = String(data: rawData, encoding: .utf16BigEndian) {
-                return text
-            }
-        }
-
-        // UTF-8 시도
-        if let text = String(data: rawData, encoding: .utf8) {
-            return text
-        }
+        if let text = String(data: rawData, encoding: .utf8) { return text }
 
         // EUC-KR fallback
         let cfEncoding = CFStringConvertEncodingToNSStringEncoding(
             CFStringEncoding(CFStringEncodings.EUC_KR.rawValue)
         )
-        if let text = String(data: rawData, encoding: String.Encoding(rawValue: cfEncoding)) {
-            return text
-        }
+        if let text = String(data: rawData, encoding: String.Encoding(rawValue: cfEncoding)) { return text }
 
         throw PreviewError.unsupportedEncoding
     }
@@ -279,16 +234,11 @@ enum PreviewError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .encodingFailed:
-            return "Failed to encode markdown as UTF-8"
-        case .templateNotFound:
-            return "template.html not found in bundle"
-        case .cssNotFound:
-            return "default.css not found in bundle"
-        case .jsNotFound:
-            return "markdown-it.min.js not found in bundle"
-        case .unsupportedEncoding:
-            return "Unsupported file encoding"
+        case .encodingFailed:    return "Failed to encode markdown as UTF-8"
+        case .templateNotFound:  return "template.html not found in bundle"
+        case .cssNotFound:       return "default.css not found in bundle"
+        case .jsNotFound:        return "markdown-it.min.js not found in bundle"
+        case .unsupportedEncoding: return "Unsupported file encoding"
         }
     }
 }

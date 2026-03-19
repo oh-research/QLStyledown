@@ -103,8 +103,7 @@ func useTheme(_ name: String) {
 }
 
 func showCurrentTheme() {
-    let theme = AppGroupConstants.activeThemeName
-    print("  \(theme)")
+    print("  \(AppGroupConstants.activeThemeName)")
 }
 
 // MARK: - Main

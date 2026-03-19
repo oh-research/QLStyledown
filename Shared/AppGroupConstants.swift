@@ -10,7 +10,7 @@ import Foundation
 enum AppGroupConstants {
     static let groupIdentifier = "group.com.ohresearch.qlstyledown"
     static let activeThemeKey = "activeTheme"
-    static let defaultThemeName = "github"
+    static let defaultThemeName = "default"
     static let containerCSSFilename = "style.css"
 
     /// ~/.qlstyledown/themes/
