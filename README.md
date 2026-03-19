@@ -1,5 +1,9 @@
 # qlstyledown
 
+<p align="center">
+  <img src="icon.png" width="128" alt="qlstyledown icon">
+</p>
+
 > CSS로 Quick Look을 커스터마이즈하는 Markdown 렌더러
 
 macOS Finder에서 `.md` 파일을 선택하고 Space를 누르면, 사용자가 정의한 CSS로 스타일링된 Markdown 미리보기를 보여줍니다.
@@ -97,7 +101,7 @@ qlstyledown use my-theme
 
 ## 요구 사항
 
-- macOS Tahoe 26.0+
+- macOS 13.0 (Ventura) 이상
 
 ## 삭제
 

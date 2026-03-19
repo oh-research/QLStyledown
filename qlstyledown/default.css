@@ -247,6 +247,31 @@ summary {
   font-weight: 600;
 }
 
+/* === KaTeX 수식 === */
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+.katex-display > .katex {
+  white-space: nowrap;
+}
+
+/* === Mermaid 다이어그램 === */
+
+.mermaid {
+  text-align: center;
+  margin: 1em 0;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* === Article container === */
 
 article {
