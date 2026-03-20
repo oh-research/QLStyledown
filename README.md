@@ -10,8 +10,9 @@ macOS Finder에서 `.md` 파일을 선택하고 Space를 누르면, 사용자가
 
 ## 특징
 
-- **GitHub 스타일** 기본 테마 (다크모드 자동 전환)
-- **8개 기본 테마** + 커스텀 CSS 테마 지원
+- **클린 기본 테마** + GitHub 스타일 테마 (다크모드 자동 전환)
+- **9개 기본 테마** + 커스텀 CSS 테마 지원
+- **이미지 placeholder** — 파일명 표시 (sandbox 제약으로 이미지 미렌더링)
 - **코드 구문 하이라이팅** (highlight.js)
 - **수식 렌더링** — `$E=mc^2$` 인라인, `$$...$$` 블록 (KaTeX)
 - **Mermaid 다이어그램** — ` ```mermaid ` 코드 블록
@@ -77,6 +78,7 @@ qlstyledown use my-theme
 
 | 테마 | 특징 | 밝기 |
 |---|---|---|
+| `default` | 클린 기본 스타일 | 라이트/다크 자동 |
 | `github` | GitHub 스타일 | 라이트/다크 자동 |
 | `lapis` | 블루톤 클린 | 라이트/다크 자동 |
 | `tailwind` | 모던 타이포그래피 | 라이트/다크 자동 |
@@ -91,13 +93,14 @@ qlstyledown use my-theme
 ### CSS 우선순위
 
 ```
-항상 적용: default.css (GitHub 테마, 기본 스타일)
+항상 적용: default.css (기본 스타일)
   ↓ 위에 덮어쓰기 (cascade)
-사용자 CSS: CLI로 설정한 글로벌 테마
+사용자 CSS: CLI로 설정한 테마 (github, lapis 등)
 ```
 
 `default.css`가 항상 적용되고, 사용자 CSS가 위에 덮어씁니다.
 전체 테마를 다시 쓸 필요 없이 변경하고 싶은 속성만 작성하면 됩니다.
+`qlstyledown use default`로 기본 스타일로 돌아갈 수 있습니다.
 
 ## 요구 사항
 
