@@ -36,8 +36,8 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         let reply = QLPreviewReply(
             dataOfContentType: .html,
             contentSize: CGSize(width: 800, height: 1000)
-        ) { _, _ in
-            return html.data(using: .utf8)
+        ) { reply in
+            return html.data(using: .utf8)!
         }
         return reply
     }
