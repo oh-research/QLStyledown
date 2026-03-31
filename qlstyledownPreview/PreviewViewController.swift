@@ -2,40 +2,21 @@
 //  PreviewViewController.swift
 //  qlstyledownPreview
 //
-//  Created by SeminOH on 3/18/26.
-//
 
 import Cocoa
 import Quartz
-import WebKit
+import UniformTypeIdentifiers
 
-class PreviewViewController: NSViewController, QLPreviewingController, WKNavigationDelegate {
-
-    private var webView: WKWebView!
+class PreviewViewController: NSViewController, QLPreviewingController {
 
     override var nibName: NSNib.Name? {
         return NSNib.Name("PreviewViewController")
     }
 
-    override func loadView() {
-        super.loadView()
-    }
+    // MARK: - Preview (data-based)
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let config = WKWebViewConfiguration()
-        config.preferences.setValue(false, forKey: "javaScriptCanOpenWindowsAutomatically")
-
-        webView = WKWebView(frame: view.bounds, configuration: config)
-        webView.autoresizingMask = [.width, .height]
-        webView.navigationDelegate = self
-        view.addSubview(webView)
-    }
-
-    // MARK: - Preview
-
-    func preparePreviewOfFile(at url: URL) async throws {
+    func providePreview(for request: QLFilePreviewRequest) async throws -> QLPreviewReply {
+        let url = request.fileURL
         let rawMarkdown = try readMarkdownFile(at: url)
         let (frontmatter, markdown) = parseFrontmatter(rawMarkdown)
 
@@ -52,14 +33,13 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
             userCSS: loadUserCSS(frontmatter: frontmatter, mdDirectory: mdParentDir)
         )
 
-        let tempHTML = FileManager.default.temporaryDirectory
-            .appendingPathComponent(".qlstyledown-preview.html")
-        try html.write(to: tempHTML, atomically: true, encoding: .utf8)
-        webView.loadFileURL(tempHTML, allowingReadAccessTo: FileManager.default.temporaryDirectory)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            try? FileManager.default.removeItem(at: tempHTML)
+        let reply = QLPreviewReply(
+            dataOfContentType: .html,
+            contentSize: CGSize(width: 800, height: 1000)
+        ) { _, _ in
+            return html.data(using: .utf8)
         }
+        return reply
     }
 
     // MARK: - HTML 조립
@@ -140,9 +120,7 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
             }
         }
 
-        guard let end = endIndex else {
-            return (nil, text)
-        }
+        guard let end = endIndex else { return (nil, text) }
 
         var cssValue: String?
         for i in 1..<end {
@@ -180,7 +158,6 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
     private func readMarkdownFile(at url: URL) throws -> String {
         let rawData = try Data(contentsOf: url)
 
-        // BOM 감지
         if rawData.starts(with: [0xEF, 0xBB, 0xBF]),
            let text = String(data: Data(rawData.dropFirst(3)), encoding: .utf8) { return text }
         if rawData.starts(with: [0xFF, 0xFE]),
@@ -190,36 +167,12 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
 
         if let text = String(data: rawData, encoding: .utf8) { return text }
 
-        // EUC-KR fallback
         let cfEncoding = CFStringConvertEncodingToNSStringEncoding(
             CFStringEncoding(CFStringEncodings.EUC_KR.rawValue)
         )
         if let text = String(data: rawData, encoding: String.Encoding(rawValue: cfEncoding)) { return text }
 
         throw PreviewError.unsupportedEncoding
-    }
-
-    // MARK: - WKNavigationDelegate
-
-    func webView(_ webView: WKWebView,
-                 decidePolicyFor navigationAction: WKNavigationAction,
-                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        guard let url = navigationAction.request.url else {
-            decisionHandler(.cancel)
-            return
-        }
-
-        switch url.scheme {
-        case "file", "data":
-            decisionHandler(.allow)
-        case "http", "https":
-            if navigationAction.navigationType == .linkActivated {
-                NSWorkspace.shared.open(url)
-            }
-            decisionHandler(.cancel)
-        default:
-            decisionHandler(.cancel)
-        }
     }
 }
 
@@ -234,10 +187,10 @@ enum PreviewError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .encodingFailed:    return "Failed to encode markdown as UTF-8"
-        case .templateNotFound:  return "template.html not found in bundle"
-        case .cssNotFound:       return "default.css not found in bundle"
-        case .jsNotFound:        return "markdown-it.min.js not found in bundle"
+        case .encodingFailed:      return "Failed to encode markdown as UTF-8"
+        case .templateNotFound:    return "template.html not found in bundle"
+        case .cssNotFound:         return "default.css not found in bundle"
+        case .jsNotFound:          return "markdown-it.min.js not found in bundle"
         case .unsupportedEncoding: return "Unsupported file encoding"
         }
     }
