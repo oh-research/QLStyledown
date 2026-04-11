@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F472B6"/>
+      <stop offset="100%" style="stop-color:#FB923C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+  <rect x="40" y="40" width="944" height="944" rx="190" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+
+  <!--
+    M↓ 마크 원본 크기: 가로 155px, 세로 68px
+    원본 중심: (107.5, 64)
+
+    조절하려면 아래 값만 수정:
+    - cx, cy: 마크의 캔버스 내 중심 좌표
+    - s: 확대 배율
+  -->
+  <g transform="translate(528, 385) scale(5) translate(-107.5, -64)">
+    <!-- M 글자 -->
+    <path d="M30 98V30h20l20 25 20-25h20v68H90V59L70 84 50 59v39z" fill="white"/>
+    <!-- ↓ 화살표 -->
+    <path d="M155 98l-30-33h20V30h20v35h20z" fill="white"/>
+  </g>
+
+  <!--
+    오렌지 악센트 바
+    - 가로 중심 512 기준으로 좌우 대칭
+    - 바 폭: width, y: 세로 위치
+  -->
+  <rect x="402" y="740" width="220" height="26" rx="10" fill="url(#accent)" opacity="0.9"/>
+
+  <!--
+    { } 중괄호
+    - 512 기준 좌우 대칭
+    - y: 세로 위치, font-size: 크기
+  -->
+  <text x="300" y="770" font-family="SF Mono, Menlo, monospace" font-size="170" font-weight="900" fill="rgba(255,255,255,0.45)" text-anchor="middle">{</text>
+  <text x="724" y="770" font-family="SF Mono, Menlo, monospace" font-size="170" font-weight="900" fill="rgba(255,255,255,0.45)" text-anchor="middle">}</text>
+</svg>

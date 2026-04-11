@@ -21,7 +21,7 @@ struct ContentView: View {
                         .frame(width: 96, height: 96)
                 }
 
-                Text("qlstyledown")
+                Text("QLStyledown")
                     .font(.title)
                     .fontWeight(.bold)
 
