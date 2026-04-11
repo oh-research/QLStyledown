@@ -1,7 +1,7 @@
 # qlstyledown
 
 <p align="center">
-  <img src="icon.png" width="128" alt="qlstyledown icon">
+  <img src="qlstyledown-icon.svg" width="128" alt="QLStyledown icon">
 </p>
 
 > CSS로 Quick Look을 커스터마이즈하는 Markdown 렌더러
@@ -33,10 +33,10 @@ brew install --cask qlstyledown
 ### 수동 설치
 
 1. [Releases](https://github.com/oh-research/QLStyledown/releases)에서 `.dmg` 다운로드
-2. `qlstyledown.app`을 `/Applications`로 드래그
+2. `QLStyledown.app`을 `/Applications`로 드래그
 3. 최초 실행 전 Gatekeeper 우회:
    ```bash
-   xattr -cr /Applications/qlstyledown.app
+   xattr -cr /Applications/QLStyledown.app
    ```
 4. 앱을 한 번 실행하면 Quick Look Extension이 등록됩니다
 
@@ -145,7 +145,7 @@ qlstyledown themes
 pluginkit -e ignore -i com.ohresearch.qlstyledown.qlstyledownPreview
 
 # 파일 삭제
-rm -rf /Applications/qlstyledown.app
+rm -rf /Applications/QLStyledown.app
 rm -rf ~/.qlstyledown
 ```
 
