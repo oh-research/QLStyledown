@@ -31,8 +31,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "40747AA72F6AD24400FA40E2"
-               BuildableName = "qlstyledown.app"
-               BlueprintName = "qlstyledown"
+               BuildableName = "QLStyledown.app"
+               BlueprintName = "QLStyledown"
                ReferencedContainer = "container:qlstyledown.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -61,8 +61,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "40747AA72F6AD24400FA40E2"
-            BuildableName = "qlstyledown.app"
-            BlueprintName = "qlstyledown"
+            BuildableName = "QLStyledown.app"
+            BlueprintName = "QLStyledown"
             ReferencedContainer = "container:qlstyledown.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -80,8 +80,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "40747AA72F6AD24400FA40E2"
-            BuildableName = "qlstyledown.app"
-            BlueprintName = "qlstyledown"
+            BuildableName = "QLStyledown.app"
+            BlueprintName = "QLStyledown"
             ReferencedContainer = "container:qlstyledown.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

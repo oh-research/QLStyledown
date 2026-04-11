@@ -28,7 +28,7 @@ func listThemes() {
 
     guard fm.fileExists(atPath: themesDir.path) else {
         print("No themes directory found at \(themesDir.path)")
-        print("Run qlstyledown.app once to create it with default themes.")
+        print("Run QLStyledown.app once to create it with default themes.")
         return
     }
 
