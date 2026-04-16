@@ -104,7 +104,7 @@ qlstyledown use my-theme
 
 ## 요구 사항
 
-- macOS 26.0 (Tahoe) 이상
+- macOS 15.0 (Sequoia) 이상
 
 ## 삭제
 
